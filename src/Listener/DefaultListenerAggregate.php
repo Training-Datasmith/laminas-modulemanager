@@ -22,10 +22,9 @@ class DefaultListenerAggregate extends AbstractListener implements
      * Attach one or more listeners
      *
      * @param  int $priority
-     * @return DefaultListenerAggregate
      */
     #[Override]
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1): static
     {
         $options                     = $this->getOptions();
         $configListener              = $this->getConfigListener();
@@ -72,11 +71,9 @@ class DefaultListenerAggregate extends AbstractListener implements
 
     /**
      * Detach all previously attached listeners
-     *
-     * @return void
      */
     #[Override]
-    public function detach(EventManagerInterface $events)
+    public function detach(EventManagerInterface $events): void
     {
         foreach ($this->listeners as $key => $listener) {
             if ($listener instanceof ListenerAggregateInterface) {
@@ -105,10 +102,8 @@ class DefaultListenerAggregate extends AbstractListener implements
 
     /**
      * Set the config merger to use.
-     *
-     * @return DefaultListenerAggregate
      */
-    public function setConfigListener(ConfigMergerInterface $configListener)
+    public function setConfigListener(ConfigMergerInterface $configListener): static
     {
         $this->configListener = $configListener;
         return $this;

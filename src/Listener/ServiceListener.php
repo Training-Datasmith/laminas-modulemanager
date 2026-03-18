@@ -60,10 +60,9 @@ class ServiceListener implements ServiceListenerInterface
 
     /**
      * @param  array $configuration
-     * @return ServiceListener
      */
     #[Override]
-    public function setDefaultServiceConfig($configuration)
+    public function setDefaultServiceConfig($configuration): static
     {
         $this->defaultServiceConfig = $configuration;
         return $this;
@@ -71,7 +70,7 @@ class ServiceListener implements ServiceListenerInterface
 
     /** {@inheritDoc} */
     #[Override]
-    public function addServiceManager($serviceManager, $key, $moduleInterface, $method)
+    public function addServiceManager($serviceManager, $key, $moduleInterface, $method): static
     {
         if (is_string($serviceManager)) {
             $smKey = $serviceManager;
@@ -80,7 +79,7 @@ class ServiceListener implements ServiceListenerInterface
         } else {
             throw new Exception\RuntimeException(sprintf(
                 'Invalid service manager provided, expected ServiceManager or string, %s provided',
-                is_object($serviceManager) ? $serviceManager::class : gettype($serviceManager)
+                get_debug_type($serviceManager)
             ));
         }
 
@@ -101,19 +100,17 @@ class ServiceListener implements ServiceListenerInterface
 
     /**
      * @param  int $priority
-     * @return ServiceListener
      */
     #[Override]
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1): static
     {
-        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, [$this, 'onLoadModule']);
-        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, [$this, 'onLoadModulesPost']);
+        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, $this->onLoadModule(...));
+        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, $this->onLoadModulesPost(...));
         return $this;
     }
 
-    /** @return void */
     #[Override]
-    public function detach(EventManagerInterface $events)
+    public function detach(EventManagerInterface $events): void
     {
         foreach ($this->listeners as $key => $listener) {
             if ($events->detach($listener)) {
@@ -133,10 +130,8 @@ class ServiceListener implements ServiceListenerInterface
      *
      * The interface and method name can be set by adding a new service manager
      * via the addServiceManager() method.
-     *
-     * @return void
      */
-    public function onLoadModule(ModuleEvent $e)
+    public function onLoadModule(ModuleEvent $e): void
     {
         $module = $e->getModule();
 
@@ -179,9 +174,8 @@ class ServiceListener implements ServiceListenerInterface
      * used to configure the service manager.
      *
      * @throws Exception\RuntimeException
-     * @return void
      */
-    public function onLoadModulesPost(ModuleEvent $e)
+    public function onLoadModulesPost(ModuleEvent $e): void
     {
         $configListener = $e->getConfigListener();
         $config         = $configListener->getMergedConfig(false);
@@ -296,7 +290,7 @@ class ServiceListener implements ServiceListenerInterface
 
         // Merge all of the things!
         $serviceConfig = [];
-        foreach ($this->serviceManagers[$key]['configuration'] as $name => $configs) {
+        foreach ($this->serviceManagers[$key]['configuration'] as $configs) {
             if (isset($configs['configuration_classes'])) {
                 foreach ($configs['configuration_classes'] as $class) {
                     $configs = ArrayUtils::merge($configs, $this->serviceConfigToArray($class));

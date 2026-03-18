@@ -17,7 +17,7 @@ class ModuleDependencyCheckerListener
     protected $loaded = [];
 
     /** @throws Exception\MissingDependencyModuleException */
-    public function __invoke(ModuleEvent $e)
+    public function __invoke(ModuleEvent $e): void
     {
         $module = $e->getModule();
 

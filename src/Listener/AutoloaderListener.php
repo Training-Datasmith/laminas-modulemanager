@@ -12,8 +12,7 @@ use function method_exists;
 
 class AutoloaderListener extends AbstractListener
 {
-    /** @return void */
-    public function __invoke(ModuleEvent $e)
+    public function __invoke(ModuleEvent $e): void
     {
         $module = $e->getModule();
         if (

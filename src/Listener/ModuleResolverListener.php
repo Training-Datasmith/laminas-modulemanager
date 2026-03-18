@@ -25,7 +25,7 @@ class ModuleResolverListener extends AbstractListener
     /**
      * @return object|false False if module class does not exist
      */
-    public function __invoke(ModuleEvent $e)
+    public function __invoke(ModuleEvent $e): object|false
     {
         $moduleName = $e->getModuleName();
 

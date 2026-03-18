@@ -54,10 +54,8 @@ class ModuleManager implements ModuleManagerInterface
 
     /**
      * Handle the loadModules event
-     *
-     * @return void
      */
-    public function onLoadModules()
+    public function onLoadModules(): void
     {
         if (true === $this->modulesAreLoaded) {
             return;
@@ -85,10 +83,9 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @triggers loadModules
      * @triggers loadModules.post
-     * @return   ModuleManager
      */
     #[Override]
-    public function loadModules()
+    public function loadModules(): static
     {
         if (true === $this->modulesAreLoaded) {
             return $this;
@@ -173,7 +170,7 @@ class ModuleManager implements ModuleManagerInterface
      * @return mixed                            module instance
      * @throws Exception\RuntimeException
      */
-    protected function loadModuleByName(ModuleEvent $event)
+    protected function loadModuleByName(ModuleEvent $event): object
     {
         $event->setName(ModuleEvent::EVENT_LOAD_MODULE_RESOLVE);
         $result = $this->getEventManager()->triggerEventUntil(static fn($r): bool => is_object($r), $event);
@@ -235,12 +232,11 @@ class ModuleManager implements ModuleManagerInterface
      *
      * @param  mixed $modules array or Traversable of module names
      * @throws Exception\InvalidArgumentException
-     * @return ModuleManager
      */
     #[Override]
-    public function setModules($modules)
+    public function setModules($modules): static
     {
-        if (is_array($modules) || $modules instanceof Traversable) {
+        if (is_iterable($modules)) {
             $this->modules = $modules;
         } else {
             throw new Exception\InvalidArgumentException(
@@ -269,10 +265,8 @@ class ModuleManager implements ModuleManagerInterface
 
     /**
      * Set the module event
-     *
-     * @return ModuleManager
      */
-    public function setEvent(ModuleEvent $event)
+    public function setEvent(ModuleEvent $event): static
     {
         $event->setTarget($this);
         $this->event = $event;
@@ -281,11 +275,9 @@ class ModuleManager implements ModuleManagerInterface
 
     /**
      * Set the event manager instance used by this module manager.
-     *
-     * @return ModuleManager
      */
     #[Override]
-    public function setEventManager(EventManagerInterface $events)
+    public function setEventManager(EventManagerInterface $events): static
     {
         $events->setIdentifiers([
             self::class,
@@ -320,6 +312,6 @@ class ModuleManager implements ModuleManagerInterface
      */
     protected function attachDefaultListeners($events)
     {
-        $events->attach(ModuleEvent::EVENT_LOAD_MODULES, [$this, 'onLoadModules']);
+        $events->attach(ModuleEvent::EVENT_LOAD_MODULES, $this->onLoadModules(...));
     }
 }

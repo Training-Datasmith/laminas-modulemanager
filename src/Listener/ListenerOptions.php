@@ -394,14 +394,13 @@ class ListenerOptions extends AbstractOptions
     public static function normalizePath($path)
     {
         $path = rtrim($path, '/');
-        $path = rtrim($path, '\\');
-        return $path;
+        return rtrim($path, '\\');
     }
 
     /** @deprecated Use self::useLaminasLoader instead */
     public function useZendLoader(): bool
     {
-        return $this->useLaminasLoader(...func_get_args());
+        return $this->useLaminasLoader();
     }
 
     /** @deprecated Use self::setUseLaminasLoader instead */
