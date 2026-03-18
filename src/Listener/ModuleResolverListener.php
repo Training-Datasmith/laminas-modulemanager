@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Laminas\ModuleManager\Listener;
 
+use function class_exists;
+
 use Generator;
+
+use function in_array;
+
 use Laminas\ModuleManager\ModuleEvent;
 
-use function class_exists;
-use function in_array;
 use function sprintf;
 
 class ModuleResolverListener extends AbstractListener

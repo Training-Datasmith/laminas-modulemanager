@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace Laminas\ModuleManager;
 
-use Laminas\EventManager\EventManager;
-use Laminas\EventManager\EventManagerInterface;
-use Override;
-use Traversable;
-
 use function current;
 use function is_array;
 use function is_object;
 use function is_string;
+
 use function key;
+
+use Laminas\EventManager\EventManager;
+use Laminas\EventManager\EventManagerInterface;
+use Override;
+
 use function sprintf;
+
+use Traversable;
 
 class ModuleManager implements ModuleManagerInterface
 {
@@ -173,7 +176,7 @@ class ModuleManager implements ModuleManagerInterface
     protected function loadModuleByName(ModuleEvent $event): object
     {
         $event->setName(ModuleEvent::EVENT_LOAD_MODULE_RESOLVE);
-        $result = $this->getEventManager()->triggerEventUntil(static fn($r): bool => is_object($r), $event);
+        $result = $this->getEventManager()->triggerEventUntil(static fn ($r): bool => is_object($r), $event);
 
         $module = $result->last();
         if (! is_object($module)) {

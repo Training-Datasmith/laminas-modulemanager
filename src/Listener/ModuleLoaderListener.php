@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Laminas\ModuleManager\Listener;
 
+use function file_exists;
+
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Loader\ModuleAutoloader;
 use Laminas\ModuleManager\ModuleEvent;
-use Override;
 
-use function file_exists;
+use Override;
 
 class ModuleLoaderListener extends AbstractListener implements ListenerAggregateInterface
 {

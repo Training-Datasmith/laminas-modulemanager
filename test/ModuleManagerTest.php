@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace LaminasTest\ModuleManager;
 
+use function array_values;
+use function count;
+
 use InvalidArgumentException;
 use Laminas\EventManager\EventManager;
 use Laminas\EventManager\SharedEventManager;
@@ -15,14 +18,15 @@ use Laminas\ModuleManager\ModuleManager;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+
+use function realpath;
+
 use RuntimeException;
+
 use SomeModule\Module;
 use stdClass;
 use SubModule\Sub\Module as SubModule;
 
-use function array_values;
-use function count;
-use function realpath;
 use function var_export;
 
 #[CoversClass(ModuleManager::class)]

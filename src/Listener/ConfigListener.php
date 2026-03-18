@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace Laminas\ModuleManager\Listener;
 
+use function file_exists;
+use function gettype;
+use function is_array;
+use function is_callable;
+use function is_string;
+
 use Laminas\Config\Config;
 use Laminas\Config\Factory as ConfigFactory;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
+
 use Laminas\ModuleManager\ModuleEvent;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\Stdlib\Glob;
 use Override;
-use Traversable;
 
-use function file_exists;
-use function gettype;
-use function is_array;
-use function is_callable;
-use function is_string;
 use function sprintf;
+
+use Traversable;
 
 class ConfigListener extends AbstractListener implements
     ConfigMergerInterface,

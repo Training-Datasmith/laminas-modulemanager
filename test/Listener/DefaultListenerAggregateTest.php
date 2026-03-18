@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace LaminasTest\ModuleManager\Listener;
 
+use function count;
+use function is_array;
+
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use Laminas\Loader\ModuleAutoloader;
 use Laminas\ModuleManager\Listener\AbstractListener;
@@ -17,11 +20,10 @@ use Laminas\ModuleManager\Listener\ModuleDependencyCheckerListener;
 use Laminas\ModuleManager\Listener\ModuleResolverListener;
 use Laminas\ModuleManager\Listener\OnBootstrapListener;
 use Laminas\ModuleManager\ModuleManager;
+
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-use function count;
-use function is_array;
 use function realpath;
 
 #[CoversClass(DefaultListenerAggregate::class)]

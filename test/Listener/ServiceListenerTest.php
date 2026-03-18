@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaminasTest\ModuleManager\Listener;
 
+use function array_keys;
+
 use ArrayObject;
 use Laminas\EventManager\EventManager;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
@@ -20,10 +22,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
-use stdClass;
 
-use function array_keys;
 use function sprintf;
+
+use stdClass;
 
 #[CoversClass(ServiceListener::class)]
 final class ServiceListenerTest extends TestCase
@@ -77,10 +79,11 @@ final class ServiceListenerTest extends TestCase
         // @codingStandardsIgnoreStart
         return [
             'invokables' => [
-                self::class => self::class
+                self::class => self::class,
             ],
             'factories' => [
-                'foo' => static function (): void {},
+                'foo' => static function (): void {
+                },
             ],
             'abstract_factories' => [
                 new TestAsset\SampleAbstractFactory(),
@@ -364,7 +367,7 @@ final class ServiceListenerTest extends TestCase
     {
         $services = new ServiceManager();
         $services->setService('config', []);
-        $services->setFactory('foo', static fn($services) => $services);
+        $services->setFactory('foo', static fn ($services) => $services);
         $listener = new ServiceListener($services);
         $listener->addServiceManager(
             $services,
@@ -378,7 +381,7 @@ final class ServiceListenerTest extends TestCase
                 'config' => ['foo' => 'bar'],
             ],
             'factories' => [
-                'foo' => static fn(): stdClass => new stdClass(),
+                'foo' => static fn (): stdClass => new stdClass(),
             ],
         ]);
 

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Laminas\ModuleManager;
 
-use Laminas\EventManager\Event;
-
 use function gettype;
+
 use function is_object;
 use function is_string;
+
+use Laminas\EventManager\Event;
+
 use function sprintf;
 
 /**

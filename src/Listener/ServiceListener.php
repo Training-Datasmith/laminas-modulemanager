@@ -4,24 +4,29 @@ declare(strict_types=1);
 
 namespace Laminas\ModuleManager\Listener;
 
-use Laminas\EventManager\EventManagerInterface;
-use Laminas\ModuleManager\ModuleEvent;
-use Laminas\ServiceManager\Config as ServiceConfig;
-use Laminas\ServiceManager\ConfigInterface as ServiceConfigInterface;
-use Laminas\ServiceManager\ServiceManager;
-use Laminas\Stdlib\ArrayUtils;
-use Override;
-use Traversable;
-
 use function class_exists;
 use function gettype;
 use function is_array;
 use function is_object;
 use function is_scalar;
 use function is_string;
+
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\ModuleManager\ModuleEvent;
+
+use Laminas\ServiceManager\Config as ServiceConfig;
+use Laminas\ServiceManager\ConfigInterface as ServiceConfigInterface;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\ArrayUtils;
+
 use function method_exists;
+
+use Override;
+
 use function spl_object_hash;
 use function sprintf;
+
+use Traversable;
 
 class ServiceListener implements ServiceListenerInterface
 {

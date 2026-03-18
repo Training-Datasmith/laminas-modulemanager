@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace LaminasTest\ModuleManager\Listener;
 
+use function file_put_contents;
+use function iterator_to_array;
+
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use Laminas\ModuleManager\Listener\AbstractListener;
 use Laminas\ModuleManager\Listener\ListenerOptions;
@@ -12,11 +15,9 @@ use Laminas\ModuleManager\Listener\ModuleResolverListener;
 use Laminas\ModuleManager\ModuleEvent;
 use Laminas\ModuleManager\ModuleManager;
 use LaminasTest\ModuleManager\SetUpCacheDirTrait;
+
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
-
-use function file_put_contents;
-use function iterator_to_array;
 
 #[CoversClass(ModuleLoaderListener::class)]
 #[CoversClass(AbstractListener::class)]

@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Laminas\ModuleManager\Listener;
 
-use Laminas\Stdlib\AbstractOptions;
-use Traversable;
-
 use function func_get_args;
 use function gettype;
+
 use function is_array;
+
+use Laminas\Stdlib\AbstractOptions;
+
 use function rtrim;
 use function sprintf;
+
+use Traversable;
 
 class ListenerOptions extends AbstractOptions
 {

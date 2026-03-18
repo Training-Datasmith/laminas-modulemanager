@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Laminas\ModuleManager\Listener;
 
+use function end;
+use function explode;
+
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -12,11 +15,9 @@ use Laminas\ModuleManager\ModuleEvent;
 use Laminas\ModuleManager\ModuleManager;
 use Laminas\Mvc\Application;
 use Laminas\Mvc\MvcEvent;
+
 use Laminas\ServiceManager\ServiceManager;
 use Override;
-
-use function end;
-use function explode;
 
 class LocatorRegistrationListener extends AbstractListener implements
     ListenerAggregateInterface
@@ -62,7 +63,7 @@ class LocatorRegistrationListener extends AbstractListener implements
                 /** @var ServiceManager $services */
                 $services = $application->getServiceManager();
                 if (! $services->has($moduleClassName)) {
-                        $services->setAlias($moduleClassName, $moduleClassNameAlias);
+                    $services->setAlias($moduleClassName, $moduleClassNameAlias);
                 }
             },
             1000

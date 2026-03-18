@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaminasTest\ModuleManager\Listener;
 
+use function array_keys;
+
 use Exception;
 use Foo\Bar;
 use Laminas\EventManager\EventManager;
@@ -17,13 +19,15 @@ use Laminas\Mvc\Application;
 use Laminas\ServiceManager\ServiceManager;
 use LaminasTest\ModuleManager\TestAsset\MockApplication;
 use ListenerTestModule\Module;
+
+use function method_exists;
+
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
+
 use ReflectionClass;
 use ReflectionProperty;
 
-use function array_keys;
-use function method_exists;
 use function str_replace;
 use function strtolower;
 

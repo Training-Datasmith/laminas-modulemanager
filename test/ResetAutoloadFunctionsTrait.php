@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace LaminasTest\ModuleManager;
 
+use function get_include_path;
+use function in_array;
+
+use function is_array;
+
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
 
-use function get_include_path;
-use function in_array;
-use function is_array;
 use function set_include_path;
 use function spl_autoload_functions;
 use function spl_autoload_unregister;

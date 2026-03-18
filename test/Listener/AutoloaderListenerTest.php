@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaminasTest\ModuleManager\Listener;
 
+use function class_exists;
+
 use Laminas\ModuleManager\Listener\AbstractListener;
 use Laminas\ModuleManager\Listener\AutoloaderListener;
 use Laminas\ModuleManager\Listener\ModuleResolverListener;
@@ -12,9 +14,8 @@ use Laminas\ModuleManager\ModuleManager;
 use NotAutoloaderModule\Bar;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 
-use function class_exists;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 
 #[CoversClass(AbstractListener::class)]
 #[CoversClass(AutoloaderListener::class)]

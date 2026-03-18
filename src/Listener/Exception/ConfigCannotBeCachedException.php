@@ -6,13 +6,14 @@ namespace Laminas\ModuleManager\Listener\Exception;
 
 use Brick\VarExporter\ExportException;
 use RuntimeException;
-use Throwable;
 
 use function sprintf;
 
+use Throwable;
+
 final class ConfigCannotBeCachedException extends RuntimeException
 {
-    private function __construct(string $message = "", int $code = 0, ?Throwable $previous = null)
+    private function __construct(string $message = '', int $code = 0, ?Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

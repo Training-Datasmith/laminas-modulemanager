@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace LaminasTest\ModuleManager;
 
+use const DIRECTORY_SEPARATOR;
+
+use function glob;
+
+use function mkdir;
+
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
 
-use function glob;
-use function mkdir;
 use function rmdir;
 use function sys_get_temp_dir;
-use function unlink;
 
-use const DIRECTORY_SEPARATOR;
+use function unlink;
 
 /**
  * Offer common setUp/tearDown methods for configure a common cache dir.

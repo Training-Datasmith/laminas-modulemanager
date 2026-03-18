@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace LaminasTest\ModuleManager\Listener;
 
 use ArrayObject;
+
+use function count;
+
 use InvalidArgumentException;
 use Laminas\Config\Config;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
@@ -16,9 +19,9 @@ use Laminas\ModuleManager\ModuleEvent;
 use Laminas\ModuleManager\ModuleManager;
 use LaminasTest\ModuleManager\SetUpCacheDirTrait;
 use Override;
+
 use PHPUnit\Framework\Attributes\CoversClass;
 
-use function count;
 use function spl_object_hash;
 
 #[CoversClass(ConfigListener::class)]
