@@ -24,8 +24,7 @@
             "php": "8.2.99"
         }
     },
-    "extra": {
-    },
+    "extra": [],
     "require": {
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "brick/varexporter": "^0.6 || ^0.7",
@@ -53,14 +52,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Laminas\\ModuleManager\\": "src/"
+            "Laminas\\Module_Manager\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ListenerTestModule\\": "test/TestAsset/ListenerTestModule/",
-            "ModuleAsClass\\": "test/TestAsset/ModuleAsClass/",
-            "LaminasTest\\ModuleManager\\": "test/"
+            "Listener_Test_Module\\": "test/TestAsset/ListenerTestModule/",
+            "Module_As_Class\\": "test/TestAsset/ModuleAsClass/",
+            "Laminas_Test\\Module_Manager\\": "test/"
         }
     },
     "scripts": {
@@ -76,6 +75,6 @@
     },
     "conflict": {
         "zendframework/zend-modulemanager": "*",
-        "amphp/amp":"<2.6.4"
+        "amphp/amp": "<2.6.4"
     }
 }
