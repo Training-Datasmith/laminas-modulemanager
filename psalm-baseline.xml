@@ -871,16 +871,16 @@
   </file>
   <file src="test/ModuleManagerTest.php">
     <ArgumentTypeCoercion>
-      <code><![CDATA['BarModule\Module']]></code>
-      <code><![CDATA['BarModule\Module']]></code>
-      <code><![CDATA['BarModule\Module']]></code>
-      <code><![CDATA['BazModule\Module']]></code>
-      <code><![CDATA['BazModule\Module']]></code>
-      <code><![CDATA['SomeModule\Module']]></code>
-      <code><![CDATA['SomeModule\Module']]></code>
-      <code><![CDATA['SomeModule\Module']]></code>
-      <code><![CDATA['SubModule\Sub\Module']]></code>
-      <code><![CDATA['SubModule\Sub\Module']]></code>
+      <code><![CDATA['Bar_Module\Module']]></code>
+      <code><![CDATA['Bar_Module\Module']]></code>
+      <code><![CDATA['Bar_Module\Module']]></code>
+      <code><![CDATA['Baz_Module\Module']]></code>
+      <code><![CDATA['Baz_Module\Module']]></code>
+      <code><![CDATA['Some_Module\Module']]></code>
+      <code><![CDATA['Some_Module\Module']]></code>
+      <code><![CDATA['Some_Module\Module']]></code>
+      <code><![CDATA['Sub_Module\Sub\Module']]></code>
+      <code><![CDATA['Sub_Module\Sub\Module']]></code>
     </ArgumentTypeCoercion>
     <InvalidArgument>
       <code><![CDATA['stringShouldBeArray']]></code>
