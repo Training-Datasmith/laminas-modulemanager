@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener;
 
-namespace Laminas\ModuleManager\Listener;
-
-use Laminas\EventManager\ListenerAggregateInterface;
-
-interface ServiceListenerInterface extends ListenerAggregateInterface
+use Laminas\Event_Manager\Listener_Aggregate_Interface;
+interface Service_Listener_Interface extends Listener_Aggregate_Interface
 {
     /**
      * Provide metadata describing how to aggregate service/plugin manager configuration.
@@ -22,11 +20,10 @@ interface ServiceListenerInterface extends ListenerAggregateInterface
      * @param  string $method          Method name
      * @return ServiceListenerInterface
      */
-    public function addServiceManager($serviceManager, $key, $moduleInterface, $method);
-
+    public function add_service_manager($service_manager, $key, $module_interface, $method);
     /**
      * @param  array $configuration
      * @return ServiceListenerInterface
      */
-    public function setDefaultServiceConfig($configuration);
+    public function set_default_service_config($configuration);
 }

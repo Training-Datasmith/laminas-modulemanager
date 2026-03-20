@@ -1,27 +1,21 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener;
 
-namespace Laminas\ModuleManager\Listener;
-
-use Laminas\Loader\AutoloaderFactory;
-use Laminas\ModuleManager\Feature\AutoloaderProviderInterface;
-use Laminas\ModuleManager\ModuleEvent;
-
+use Laminas\Loader\Autoloader_Factory;
+use Laminas\Module_Manager\Feature\Autoloader_Provider_Interface;
+use Laminas\Module_Manager\Module_Event;
 use function method_exists;
-
-class AutoloaderListener extends AbstractListener
+class Autoloader_Listener extends Abstract_Listener
 {
-    public function __invoke(ModuleEvent $e): void
+    public function __invoke(Module_Event $e): void
     {
-        $module = $e->getModule();
-        if (
-            ! $module instanceof AutoloaderProviderInterface
-            && ! method_exists($module, 'getAutoloaderConfig')
-        ) {
+        $module = $e->get_module();
+        if (!$module instanceof Autoloader_Provider_Interface && !method_exists($module, 'getAutoloaderConfig')) {
             return;
         }
-        $autoloaderConfig = $module->getAutoloaderConfig();
-        AutoloaderFactory::factory($autoloaderConfig);
+        $autoloader_config = $module->get_autoloader_config();
+        Autoloader_Factory::factory($autoloader_config);
     }
 }

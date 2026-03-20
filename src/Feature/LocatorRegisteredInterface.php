@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\ModuleManager\Feature;
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
 /**
  * By implementing this interface in a Module class, the instance of the Module
@@ -11,6 +10,6 @@ namespace Laminas\ModuleManager\Feature;
  * name. Implementing this interface obviously does not require adding any
  * methods to your class.
  */
-interface LocatorRegisteredInterface
+interface Locator_Registered_Interface
 {
 }

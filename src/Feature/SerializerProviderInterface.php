@@ -1,11 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-interface SerializerProviderInterface
+interface Serializer_Provider_Interface
 {
     /** @return array */
-    public function getSerializerConfig();
+    public function get_serializer_config();
 }

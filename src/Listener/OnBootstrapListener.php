@@ -1,31 +1,24 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener;
 
-namespace Laminas\ModuleManager\Listener;
-
-use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
-use Laminas\ModuleManager\ModuleEvent;
-use Laminas\ModuleManager\ModuleManager;
+use Laminas\Module_Manager\Feature\Bootstrap_Listener_Interface;
+use Laminas\Module_Manager\Module_Event;
+use Laminas\Module_Manager\Module_Manager;
 use Laminas\Mvc\Application;
-
 use function method_exists;
-
-class OnBootstrapListener extends AbstractListener
+class On_Bootstrap_Listener extends Abstract_Listener
 {
-    public function __invoke(ModuleEvent $e): void
+    public function __invoke(Module_Event $e): void
     {
-        $module = $e->getModule();
-        if (
-            ! $module instanceof BootstrapListenerInterface
-            && ! method_exists($module, 'onBootstrap')
-        ) {
+        $module = $e->get_module();
+        if (!$module instanceof Bootstrap_Listener_Interface && !method_exists($module, 'onBootstrap')) {
             return;
         }
-
-        $moduleManager = $e->getTarget();
-        $events        = $moduleManager->getEventManager();
-        $sharedEvents  = $events->getSharedManager();
-        $sharedEvents->attach(Application::class, ModuleManager::EVENT_BOOTSTRAP, [$module, 'onBootstrap']);
+        $module_manager = $e->get_target();
+        $events = $module_manager->get_event_manager();
+        $shared_events = $events->get_shared_manager();
+        $shared_events->attach(Application::class, Module_Manager::EVENT_BOOTSTRAP, [$module, 'onBootstrap']);
     }
 }

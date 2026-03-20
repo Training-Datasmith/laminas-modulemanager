@@ -1,41 +1,35 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener;
 
-namespace Laminas\ModuleManager\Listener;
-
-use Brick\VarExporter\ExportException;
-use Brick\VarExporter\VarExporter;
-use Laminas\ModuleManager\Listener\Exception\ConfigCannotBeCachedException;
-use Webimpress\SafeWriter\FileWriter;
-
-abstract class AbstractListener
+use Brick\Var_Exporter\Export_Exception;
+use Brick\Var_Exporter\Var_Exporter;
+use Laminas\Module_Manager\Listener\Exception\Config_Cannot_Be_Cached_Exception;
+use Webimpress\Safe_Writer\File_Writer;
+abstract class Abstract_Listener
 {
     /** @var ListenerOptions */
     protected $options;
-
-    public function __construct(?ListenerOptions $options = null)
+    public function __construct(?Listener_Options $options = null)
     {
-        $options = $options ?: new ListenerOptions();
-        $this->setOptions($options);
+        $options = $options ?: new Listener_Options();
+        $this->set_options($options);
     }
-
     /** @return ListenerOptions */
-    public function getOptions()
+    public function get_options()
     {
         return $this->options;
     }
-
     /**
      * @param ListenerOptions $options the value to be set
      * @return AbstractListener
      */
-    public function setOptions(ListenerOptions $options)
+    public function set_options(Listener_Options $options)
     {
         $this->options = $options;
         return $this;
     }
-
     /**
      * Write a simple array of scalars to a file
      *
@@ -43,19 +37,14 @@ abstract class AbstractListener
      * @param  array $array
      * @return AbstractListener
      */
-    protected function writeArrayToFile($filePath, $array)
+    protected function write_array_to_file($file_path, $array)
     {
         try {
-            $content = "<?php\n" . VarExporter::export(
-                $array,
-                VarExporter::ADD_RETURN | VarExporter::CLOSURE_SNAPSHOT_USES
-            );
-        } catch (ExportException $e) {
-            throw ConfigCannotBeCachedException::fromExporterException($e);
+            $content = "<?php\n" . Var_Exporter::export($array, Var_Exporter::ADD_RETURN | Var_Exporter::CLOSURE_SNAPSHOT_USES);
+        } catch (Export_Exception $e) {
+            throw Config_Cannot_Be_Cached_Exception::from_exporter_exception($e);
         }
-
-        FileWriter::writeFile($filePath, $content);
-
+        File_Writer::write_file($file_path, $content);
         return $this;
     }
 }

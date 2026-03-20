@@ -1,231 +1,186 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\ModuleManager\Listener;
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener;
 
 use function file_exists;
 use function gettype;
 use function is_array;
 use function is_callable;
 use function is_string;
-
 use Laminas\Config\Config;
 use Laminas\Config\Factory as ConfigFactory;
-use Laminas\EventManager\EventManagerInterface;
-use Laminas\EventManager\ListenerAggregateInterface;
-use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ModuleManager\Feature\ConfigProviderInterface;
-
-use Laminas\ModuleManager\ModuleEvent;
-use Laminas\Stdlib\ArrayUtils;
+use Laminas\Event_Manager\Event_Manager_Interface;
+use Laminas\Event_Manager\Listener_Aggregate_Interface;
+use Laminas\Event_Manager\Listener_Aggregate_Trait;
+use Laminas\Module_Manager\Feature\Config_Provider_Interface;
+use Laminas\Module_Manager\Module_Event;
+use Laminas\Stdlib\Array_Utils;
 use Laminas\Stdlib\Glob;
 use Override;
-
 use function sprintf;
-
 use Traversable;
-
-class ConfigListener extends AbstractListener implements
-    ConfigMergerInterface,
-    ListenerAggregateInterface
+class Config_Listener extends Abstract_Listener implements Config_Merger_Interface, Listener_Aggregate_Interface
 {
-    use ListenerAggregateTrait;
-
+    use Listener_Aggregate_Trait;
     public const STATIC_PATH = 'static_path';
-    public const GLOB_PATH   = 'glob_path';
-
+    public const GLOB_PATH = 'glob_path';
     /** @var array */
     protected $configs = [];
-
     /** @var array */
-    protected $mergedConfig = [];
-
+    protected $merged_config = [];
     /** @var Config|null */
-    protected $mergedConfigObject;
-
+    protected $merged_config_object;
     /** @var bool */
-    protected $skipConfig = false;
-
+    protected $skip_config = false;
     /** @var array */
     protected $paths = [];
-
-    public function __construct(?ListenerOptions $options = null)
+    public function __construct(?Listener_Options $options = null)
     {
         parent::__construct($options);
-        if ($this->hasCachedConfig()) {
-            $this->skipConfig = true;
-            $this->setMergedConfig($this->getCachedConfig());
+        if ($this->has_cached_config()) {
+            $this->skip_config = true;
+            $this->set_merged_config($this->get_cached_config());
         } else {
-            $this->addConfigGlobPaths($this->getOptions()->getConfigGlobPaths());
-            $this->addConfigStaticPaths($this->getOptions()->getConfigStaticPaths());
+            $this->add_config_glob_paths($this->get_options()->get_config_glob_paths());
+            $this->add_config_static_paths($this->get_options()->get_config_static_paths());
         }
     }
-
     /** {@inheritDoc} */
     #[Override]
-    public function attach(EventManagerInterface $events, $priority = 1): void
+    public function attach(Event_Manager_Interface $events, $priority = 1): void
     {
-        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULES, $this->onloadModulesPre(...), 1000);
-
-        if ($this->skipConfig) {
+        $this->listeners[] = $events->attach(Module_Event::EVENT_LOAD_MODULES, $this->onload_modules_pre(...), 1000);
+        if ($this->skip_config) {
             // We already have the config from cache, no need to collect or merge.
             return;
         }
-
-        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, $this->onLoadModule(...));
-        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULES, $this->onLoadModules(...), -1000);
-        $this->listeners[] = $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, $this->onMergeConfig(...), 1000);
+        $this->listeners[] = $events->attach(Module_Event::EVENT_LOAD_MODULE, $this->on_load_module(...));
+        $this->listeners[] = $events->attach(Module_Event::EVENT_LOAD_MODULES, $this->on_load_modules(...), -1000);
+        $this->listeners[] = $events->attach(Module_Event::EVENT_MERGE_CONFIG, $this->on_merge_config(...), 1000);
     }
-
     /**
      * Pass self to the ModuleEvent object early so everyone has access.
      */
-    public function onloadModulesPre(ModuleEvent $e): static
+    public function onload_modules_pre(Module_Event $e): static
     {
-        $e->setConfigListener($this);
-
+        $e->set_config_listener($this);
         return $this;
     }
-
     /**
      * Merge the config for each module
      */
-    public function onLoadModule(ModuleEvent $e): static
+    public function on_load_module(Module_Event $e): static
     {
-        $module = $e->getModule();
-
-        if (
-            ! $module instanceof ConfigProviderInterface
-            && ! is_callable([$module, 'getConfig'])
-        ) {
+        $module = $e->get_module();
+        if (!$module instanceof Config_Provider_Interface && !is_callable([$module, 'getConfig'])) {
             return $this;
         }
-
-        $config = $module->getConfig();
-        $this->addConfig($e->getModuleName(), $config);
-
+        $config = $module->get_config();
+        $this->add_config($e->get_module_name(), $config);
         return $this;
     }
-
     /**
      * Merge all config files matched by the given glob()s
      *
      * This is only attached if config is not cached.
      */
-    public function onMergeConfig(ModuleEvent $e): static
+    public function on_merge_config(Module_Event $e): static
     {
         // Load the config files
         foreach ($this->paths as $path) {
-            $this->addConfigByPath($path['path'], $path['type']);
+            $this->add_config_by_path($path['path'], $path['type']);
         }
-
         // Merge all of the collected configs
-        $this->mergedConfig = $this->getOptions()->getExtraConfig() ?: [];
+        $this->merged_config = $this->get_options()->get_extra_config() ?: [];
         foreach ($this->configs as $config) {
-            $this->mergedConfig = ArrayUtils::merge($this->mergedConfig, $config);
+            $this->merged_config = Array_Utils::merge($this->merged_config, $config);
         }
-
         return $this;
     }
-
     /**
      * Optionally cache merged config
      *
      * This is only attached if config is not cached.
      */
-    public function onLoadModules(ModuleEvent $e): static
+    public function on_load_modules(Module_Event $e): static
     {
         // Trigger MERGE_CONFIG event. This is a hook to allow the merged application config to be
         // modified before it is cached (In particular, allows the removal of config keys)
-        $originalEventName = $e->getName();
-        $e->setName(ModuleEvent::EVENT_MERGE_CONFIG);
-        $e->getTarget()->getEventManager()->triggerEvent($e);
-
+        $original_event_name = $e->get_name();
+        $e->set_name(Module_Event::EVENT_MERGE_CONFIG);
+        $e->get_target()->get_event_manager()->trigger_event($e);
         // Reset event name
-        $e->setName($originalEventName);
-
+        $e->set_name($original_event_name);
         // If enabled, update the config cache
-        if (
-            $this->getOptions()->getConfigCacheEnabled()
-            && false === $this->skipConfig
-        ) {
-            $configFile = $this->getOptions()->getConfigCacheFile();
-            $this->writeArrayToFile($configFile, $this->getMergedConfig(false));
+        if ($this->get_options()->get_config_cache_enabled() && false === $this->skip_config) {
+            $config_file = $this->get_options()->get_config_cache_file();
+            $this->write_array_to_file($config_file, $this->get_merged_config(false));
         }
-
         return $this;
     }
-
     /**
      * @param  bool $returnConfigAsObject
      * @return mixed
      */
     #[Override]
-    public function getMergedConfig($returnConfigAsObject = true)
+    public function get_merged_config($return_config_as_object = true)
     {
-        if ($returnConfigAsObject === true) {
-            if ($this->mergedConfigObject === null) {
-                $this->mergedConfigObject = new Config($this->mergedConfig);
+        if ($return_config_as_object === true) {
+            if ($this->merged_config_object === null) {
+                $this->merged_config_object = new Config($this->merged_config);
             }
-            return $this->mergedConfigObject;
+            return $this->merged_config_object;
         }
-
-        return $this->mergedConfig;
+        return $this->merged_config;
     }
-
     #[Override]
-    public function setMergedConfig(array $config): static
+    public function set_merged_config(array $config): static
     {
-        $this->mergedConfig       = $config;
-        $this->mergedConfigObject = null;
+        $this->merged_config = $config;
+        $this->merged_config_object = null;
         return $this;
     }
-
     /**
      * Add an array of glob paths of config files to merge after loading modules
      *
      * @param  array|Traversable $globPaths
      */
-    public function addConfigGlobPaths($globPaths): static
+    public function add_config_glob_paths($glob_paths): static
     {
-        $this->addConfigPaths($globPaths, self::GLOB_PATH);
+        $this->add_config_paths($glob_paths, self::GLOB_PATH);
         return $this;
     }
-
     /**
      * Add a glob path of config files to merge after loading modules
      *
      * @param  string $globPath
      */
-    public function addConfigGlobPath($globPath): static
+    public function add_config_glob_path($glob_path): static
     {
-        $this->addConfigPath($globPath, self::GLOB_PATH);
+        $this->add_config_path($glob_path, self::GLOB_PATH);
         return $this;
     }
-
     /**
      * Add an array of static paths of config files to merge after loading modules
      *
      * @param  array|Traversable $staticPaths
      */
-    public function addConfigStaticPaths($staticPaths): static
+    public function add_config_static_paths($static_paths): static
     {
-        $this->addConfigPaths($staticPaths, self::STATIC_PATH);
+        $this->add_config_paths($static_paths, self::STATIC_PATH);
         return $this;
     }
-
     /**
      * Add a static path of config files to merge after loading modules
      *
      * @param  string $staticPath
      */
-    public function addConfigStaticPath($staticPath): static
+    public function add_config_static_path($static_path): static
     {
-        $this->addConfigPath($staticPath, self::STATIC_PATH);
+        $this->add_config_path($static_path, self::STATIC_PATH);
         return $this;
     }
-
     /**
      * Add an array of paths of config files to merge after loading modules
      *
@@ -233,30 +188,18 @@ class ConfigListener extends AbstractListener implements
      * @param string $type
      * @throws Exception\InvalidArgumentException
      */
-    protected function addConfigPaths($paths, $type)
+    protected function add_config_paths($paths, $type)
     {
         if ($paths instanceof Traversable) {
-            $paths = ArrayUtils::iteratorToArray($paths);
+            $paths = Array_Utils::iterator_to_array($paths);
         }
-
-        if (! is_array($paths)) {
-            throw new Exception\InvalidArgumentException(
-                sprintf(
-                    'Argument passed to %s::%s() must be an array, '
-                    . 'implement the Traversable interface, or be an '
-                    . 'instance of Laminas\Config\Config. %s given.',
-                    self::class,
-                    __METHOD__,
-                    gettype($paths)
-                )
-            );
+        if (!is_array($paths)) {
+            throw new Exception\InvalidArgumentException(sprintf('Argument passed to %s::%s() must be an array, ' . 'implement the Traversable interface, or be an ' . 'instance of Laminas\Config\Config. %s given.', self::class, __METHOD__, gettype($paths)));
         }
-
         foreach ($paths as $path) {
-            $this->addConfigPath($path, $type);
+            $this->add_config_path($path, $type);
         }
     }
-
     /**
      * Add a path of config files to load and merge after loading modules
      *
@@ -264,49 +207,30 @@ class ConfigListener extends AbstractListener implements
      * @param  string $type
      * @throws Exception\InvalidArgumentException
      */
-    protected function addConfigPath($path, $type): static
+    protected function add_config_path($path, $type): static
     {
-        if (! is_string($path)) {
-            throw new Exception\InvalidArgumentException(
-                sprintf(
-                    'Parameter to %s::%s() must be a string; %s given.',
-                    self::class,
-                    __METHOD__,
-                    gettype($path)
-                )
-            );
+        if (!is_string($path)) {
+            throw new Exception\InvalidArgumentException(sprintf('Parameter to %s::%s() must be a string; %s given.', self::class, __METHOD__, gettype($path)));
         }
         $this->paths[] = ['type' => $type, 'path' => $path];
         return $this;
     }
-
     /**
      * @param string $key
      * @param array|Traversable $config
      * @throws Exception\InvalidArgumentException
      */
-    protected function addConfig($key, $config): static
+    protected function add_config($key, $config): static
     {
         if ($config instanceof Traversable) {
-            $config = ArrayUtils::iteratorToArray($config);
+            $config = Array_Utils::iterator_to_array($config);
         }
-
-        if (! is_array($config)) {
-            throw new Exception\InvalidArgumentException(
-                sprintf(
-                    'Config being merged must be an array, '
-                    . 'implement the Traversable interface, or be an '
-                    . 'instance of Laminas\Config\Config. %s given.',
-                    gettype($config)
-                )
-            );
+        if (!is_array($config)) {
+            throw new Exception\InvalidArgumentException(sprintf('Config being merged must be an array, ' . 'implement the Traversable interface, or be an ' . 'instance of Laminas\Config\Config. %s given.', gettype($config)));
         }
-
         $this->configs[$key] = $config;
-
         return $this;
     }
-
     /**
      * Given a path (glob or static), fetch the config and add it to the array
      * of configs to merge.
@@ -314,39 +238,32 @@ class ConfigListener extends AbstractListener implements
      * @param string $path
      * @param string $type
      */
-    protected function addConfigByPath($path, $type): static
+    protected function add_config_by_path($path, $type): static
     {
         switch ($type) {
             case self::STATIC_PATH:
-                $this->addConfig($path, ConfigFactory::fromFile($path));
+                $this->add_config($path, Config_Factory::from_file($path));
                 break;
-
             case self::GLOB_PATH:
                 // We want to keep track of where each value came from so we don't
                 // use ConfigFactory::fromFiles() since it does merging internally.
                 foreach (Glob::glob($path, Glob::GLOB_BRACE, true) as $file) {
-                    $this->addConfig($file, ConfigFactory::fromFile($file));
+                    $this->add_config($file, Config_Factory::from_file($file));
                 }
                 break;
         }
-
         return $this;
     }
-
-    protected function hasCachedConfig(): bool
+    protected function has_cached_config(): bool
     {
-        if (
-            ($this->getOptions()->getConfigCacheEnabled())
-            && (file_exists($this->getOptions()->getConfigCacheFile()))
-        ) {
+        if ($this->get_options()->get_config_cache_enabled() && file_exists($this->get_options()->get_config_cache_file())) {
             return true;
         }
         return false;
     }
-
     /** @return mixed */
-    protected function getCachedConfig()
+    protected function get_cached_config()
     {
-        return include $this->getOptions()->getConfigCacheFile();
+        return include $this->get_options()->get_config_cache_file();
     }
 }

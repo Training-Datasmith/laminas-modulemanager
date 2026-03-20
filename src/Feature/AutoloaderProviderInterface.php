@@ -1,15 +1,14 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-interface AutoloaderProviderInterface
+interface Autoloader_Provider_Interface
 {
     /**
      * Return an array for passing to Laminas\Loader\AutoloaderFactory.
      *
      * @return array
      */
-    public function getAutoloaderConfig();
+    public function get_autoloader_config();
 }

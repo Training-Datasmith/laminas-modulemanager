@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-use Laminas\Console\Adapter\AdapterInterface;
-
-interface ConsoleUsageProviderInterface
+use Laminas\Console\Adapter\Adapter_Interface;
+interface Console_Usage_Provider_Interface
 {
     /**
      * Returns an array or a string containing usage information for this module's Console commands.
@@ -28,5 +26,5 @@ interface ConsoleUsageProviderInterface
      *
      * @return array|string|null
      */
-    public function getConsoleUsage(AdapterInterface $console);
+    public function get_console_usage(Adapter_Interface $console);
 }

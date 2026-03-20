@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\ModuleManager\Feature;
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
 use Traversable;
-
-interface ConfigProviderInterface
+interface Config_Provider_Interface
 {
     /**
      * Returns configuration to merge with application configuration
      *
      * @return array|Traversable
      */
-    public function getConfig();
+    public function get_config();
 }

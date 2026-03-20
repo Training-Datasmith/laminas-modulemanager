@@ -1,66 +1,48 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\ModuleManager\Listener;
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener;
 
 use function func_get_args;
 use function gettype;
-
 use function is_array;
-
-use Laminas\Stdlib\AbstractOptions;
-
+use Laminas\Stdlib\Abstract_Options;
 use function rtrim;
 use function sprintf;
-
 use Traversable;
-
-class ListenerOptions extends AbstractOptions
+class Listener_Options extends Abstract_Options
 {
     /** @var array */
-    protected $modulePaths = [];
-
+    protected $module_paths = [];
     /** @var array */
-    protected $configGlobPaths = [];
-
+    protected $config_glob_paths = [];
     /** @var array */
-    protected $configStaticPaths = [];
-
+    protected $config_static_paths = [];
     /** @var array */
-    protected $extraConfig = [];
-
+    protected $extra_config = [];
     /** @var bool */
-    protected $configCacheEnabled = false;
-
+    protected $config_cache_enabled = false;
     /** @var string */
-    protected $configCacheKey;
-
+    protected $config_cache_key;
     /** @var string|null */
-    protected $cacheDir;
-
+    protected $cache_dir;
     /** @var bool */
-    protected $checkDependencies = true;
-
+    protected $check_dependencies = true;
     /** @var bool */
-    protected $moduleMapCacheEnabled = false;
-
+    protected $module_map_cache_enabled = false;
     /** @var string */
-    protected $moduleMapCacheKey;
-
+    protected $module_map_cache_key;
     /** @var bool */
-    protected $useLaminasLoader = true;
-
+    protected $use_laminas_loader = true;
     /**
      * Get an array of paths where modules reside
      *
      * @return array
      */
-    public function getModulePaths()
+    public function get_module_paths()
     {
-        return $this->modulePaths;
+        return $this->module_paths;
     }
-
     /**
      * Set an array of paths where modules reside
      *
@@ -68,45 +50,32 @@ class ListenerOptions extends AbstractOptions
      * @throws Exception\InvalidArgumentException
      * @return ListenerOptions Provides fluent interface
      */
-    public function setModulePaths($modulePaths)
+    public function set_module_paths($module_paths)
     {
-        if (! is_array($modulePaths) && ! $modulePaths instanceof Traversable) {
-            throw new Exception\InvalidArgumentException(
-                sprintf(
-                    'Argument passed to %s::%s() must be an array, '
-                    . 'implement the Traversable interface, or be an '
-                    . 'instance of Laminas\Config\Config. %s given.',
-                    self::class,
-                    __METHOD__,
-                    gettype($modulePaths)
-                )
-            );
+        if (!is_array($module_paths) && !$module_paths instanceof Traversable) {
+            throw new Exception\InvalidArgumentException(sprintf('Argument passed to %s::%s() must be an array, ' . 'implement the Traversable interface, or be an ' . 'instance of Laminas\Config\Config. %s given.', self::class, __METHOD__, gettype($module_paths)));
         }
-
-        $this->modulePaths = $modulePaths;
+        $this->module_paths = $module_paths;
         return $this;
     }
-
     /**
      * Get the glob patterns to load additional config files
      *
      * @return array
      */
-    public function getConfigGlobPaths()
+    public function get_config_glob_paths()
     {
-        return $this->configGlobPaths;
+        return $this->config_glob_paths;
     }
-
     /**
      * Get the static paths to load additional config files
      *
      * @return array
      */
-    public function getConfigStaticPaths()
+    public function get_config_static_paths()
     {
-        return $this->configStaticPaths;
+        return $this->config_static_paths;
     }
-
     /**
      * Set the glob patterns to use for loading additional config files
      *
@@ -114,25 +83,14 @@ class ListenerOptions extends AbstractOptions
      * @throws Exception\InvalidArgumentException
      * @return ListenerOptions Provides fluent interface
      */
-    public function setConfigGlobPaths($configGlobPaths)
+    public function set_config_glob_paths($config_glob_paths)
     {
-        if (! is_array($configGlobPaths) && ! $configGlobPaths instanceof Traversable) {
-            throw new Exception\InvalidArgumentException(
-                sprintf(
-                    'Argument passed to %s::%s() must be an array, '
-                    . 'implement the Traversable interface, or be an '
-                    . 'instance of Laminas\Config\Config. %s given.',
-                    self::class,
-                    __METHOD__,
-                    gettype($configGlobPaths)
-                )
-            );
+        if (!is_array($config_glob_paths) && !$config_glob_paths instanceof Traversable) {
+            throw new Exception\InvalidArgumentException(sprintf('Argument passed to %s::%s() must be an array, ' . 'implement the Traversable interface, or be an ' . 'instance of Laminas\Config\Config. %s given.', self::class, __METHOD__, gettype($config_glob_paths)));
         }
-
-        $this->configGlobPaths = $configGlobPaths;
+        $this->config_glob_paths = $config_glob_paths;
         return $this;
     }
-
     /**
      * Set the static paths to use for loading additional config files
      *
@@ -140,35 +98,23 @@ class ListenerOptions extends AbstractOptions
      * @throws Exception\InvalidArgumentException
      * @return ListenerOptions Provides fluent interface
      */
-    public function setConfigStaticPaths($configStaticPaths)
+    public function set_config_static_paths($config_static_paths)
     {
-        if (! is_array($configStaticPaths) && ! $configStaticPaths instanceof Traversable) {
-            throw new Exception\InvalidArgumentException(
-                sprintf(
-                    'Argument passed to %s::%s() must be an array, '
-                    . 'implement the Traversable interface, or be an '
-                    . 'instance of Laminas\Config\Config. %s given.',
-                    self::class,
-                    __METHOD__,
-                    gettype($configStaticPaths)
-                )
-            );
+        if (!is_array($config_static_paths) && !$config_static_paths instanceof Traversable) {
+            throw new Exception\InvalidArgumentException(sprintf('Argument passed to %s::%s() must be an array, ' . 'implement the Traversable interface, or be an ' . 'instance of Laminas\Config\Config. %s given.', self::class, __METHOD__, gettype($config_static_paths)));
         }
-
-        $this->configStaticPaths = $configStaticPaths;
+        $this->config_static_paths = $config_static_paths;
         return $this;
     }
-
     /**
      * Get any extra config to merge in.
      *
      * @return array|Traversable
      */
-    public function getExtraConfig()
+    public function get_extra_config()
     {
-        return $this->extraConfig;
+        return $this->extra_config;
     }
-
     /**
      * Add some extra config array to the main config. This is mainly useful
      * for unit testing purposes.
@@ -177,69 +123,54 @@ class ListenerOptions extends AbstractOptions
      * @throws Exception\InvalidArgumentException
      * @return ListenerOptions Provides fluent interface
      */
-    public function setExtraConfig($extraConfig)
+    public function set_extra_config($extra_config)
     {
-        if (! is_array($extraConfig) && ! $extraConfig instanceof Traversable) {
-            throw new Exception\InvalidArgumentException(
-                sprintf(
-                    'Argument passed to %s::%s() must be an array, '
-                    . 'implement the Traversable interface, or be an '
-                    . 'instance of Laminas\Config\Config. %s given.',
-                    self::class,
-                    __METHOD__,
-                    gettype($extraConfig)
-                )
-            );
+        if (!is_array($extra_config) && !$extra_config instanceof Traversable) {
+            throw new Exception\InvalidArgumentException(sprintf('Argument passed to %s::%s() must be an array, ' . 'implement the Traversable interface, or be an ' . 'instance of Laminas\Config\Config. %s given.', self::class, __METHOD__, gettype($extra_config)));
         }
-
-        $this->extraConfig = $extraConfig;
+        $this->extra_config = $extra_config;
         return $this;
     }
-
     /**
      * Check if the config cache is enabled
      *
      * @return bool
      */
-    public function getConfigCacheEnabled()
+    public function get_config_cache_enabled()
     {
-        return $this->configCacheEnabled;
+        return $this->config_cache_enabled;
     }
-
     /**
      * Set if the config cache should be enabled or not
      *
      * @param  bool $enabled
      * @return ListenerOptions
      */
-    public function setConfigCacheEnabled($enabled)
+    public function set_config_cache_enabled($enabled)
     {
-        $this->configCacheEnabled = (bool) $enabled;
+        $this->config_cache_enabled = (bool) $enabled;
         return $this;
     }
-
     /**
      * Get key used to create the cache file name
      *
      * @return string
      */
-    public function getConfigCacheKey()
+    public function get_config_cache_key()
     {
-        return (string) $this->configCacheKey;
+        return (string) $this->config_cache_key;
     }
-
     /**
      * Set key used to create the cache file name
      *
      * @param  string $configCacheKey the value to be set
      * @return ListenerOptions
      */
-    public function setConfigCacheKey($configCacheKey)
+    public function set_config_cache_key($config_cache_key)
     {
-        $this->configCacheKey = $configCacheKey;
+        $this->config_cache_key = $config_cache_key;
         return $this;
     }
-
     /**
      * Get the path to the config cache
      *
@@ -248,129 +179,114 @@ class ListenerOptions extends AbstractOptions
      *
      * @return string
      */
-    public function getConfigCacheFile()
+    public function get_config_cache_file()
     {
-        if ($this->getConfigCacheKey()) {
-            return $this->getCacheDir() . '/module-config-cache.' . $this->getConfigCacheKey() . '.php';
+        if ($this->get_config_cache_key()) {
+            return $this->get_cache_dir() . '/module-config-cache.' . $this->get_config_cache_key() . '.php';
         }
-
-        return $this->getCacheDir() . '/module-config-cache.php';
+        return $this->get_cache_dir() . '/module-config-cache.php';
     }
-
     /**
      * Get the path where cache file(s) are stored
      *
      * @return string|null
      */
-    public function getCacheDir()
+    public function get_cache_dir()
     {
-        return $this->cacheDir;
+        return $this->cache_dir;
     }
-
     /**
      * Set the path where cache files can be stored
      *
      * @param  string|null $cacheDir the value to be set
      * @return ListenerOptions
      */
-    public function setCacheDir($cacheDir)
+    public function set_cache_dir($cache_dir)
     {
-        $this->cacheDir = $cacheDir ? static::normalizePath($cacheDir) : null;
-
+        $this->cache_dir = $cache_dir ? static::normalize_path($cache_dir) : null;
         return $this;
     }
-
     /**
      * Check if the module class map cache is enabled
      *
      * @return bool
      */
-    public function getModuleMapCacheEnabled()
+    public function get_module_map_cache_enabled()
     {
-        return $this->moduleMapCacheEnabled;
+        return $this->module_map_cache_enabled;
     }
-
     /**
      * Set if the module class map cache should be enabled or not
      *
      * @param  bool $enabled
      * @return ListenerOptions
      */
-    public function setModuleMapCacheEnabled($enabled)
+    public function set_module_map_cache_enabled($enabled)
     {
-        $this->moduleMapCacheEnabled = (bool) $enabled;
+        $this->module_map_cache_enabled = (bool) $enabled;
         return $this;
     }
-
     /**
      * Get key used to create the cache file name
      *
      * @return string
      */
-    public function getModuleMapCacheKey()
+    public function get_module_map_cache_key()
     {
-        return (string) $this->moduleMapCacheKey;
+        return (string) $this->module_map_cache_key;
     }
-
     /**
      * Set key used to create the cache file name
      *
      * @param  string $moduleMapCacheKey the value to be set
      * @return ListenerOptions
      */
-    public function setModuleMapCacheKey($moduleMapCacheKey)
+    public function set_module_map_cache_key($module_map_cache_key)
     {
-        $this->moduleMapCacheKey = $moduleMapCacheKey;
+        $this->module_map_cache_key = $module_map_cache_key;
         return $this;
     }
-
     /**
      * Get the path to the module class map cache
      *
      * @return string
      */
-    public function getModuleMapCacheFile()
+    public function get_module_map_cache_file()
     {
-        if ($this->getModuleMapCacheKey()) {
-            return $this->getCacheDir() . '/module-classmap-cache.' . $this->getModuleMapCacheKey() . '.php';
+        if ($this->get_module_map_cache_key()) {
+            return $this->get_cache_dir() . '/module-classmap-cache.' . $this->get_module_map_cache_key() . '.php';
         }
-
-        return $this->getCacheDir() . '/module-classmap-cache.php';
+        return $this->get_cache_dir() . '/module-classmap-cache.php';
     }
-
     /**
      * Set whether to check dependencies during module loading or not
      *
      * @return bool
      */
-    public function getCheckDependencies()
+    public function get_check_dependencies()
     {
-        return $this->checkDependencies;
+        return $this->check_dependencies;
     }
-
     /**
      * Set whether to check dependencies during module loading or not
      *
      * @param  bool $checkDependencies the value to be set
      * @return ListenerOptions
      */
-    public function setCheckDependencies($checkDependencies)
+    public function set_check_dependencies($check_dependencies)
     {
-        $this->checkDependencies = (bool) $checkDependencies;
-
+        $this->check_dependencies = (bool) $check_dependencies;
         return $this;
     }
-
     /**
      * Whether or not to use laminas-loader to autoload modules.
      *
      * @return bool
      */
-    public function useLaminasLoader()
+    public function use_laminas_loader()
     {
-        return $this->useLaminasLoader;
+        return $this->use_laminas_loader;
     }
-
     /**
      * Set a flag indicating if the module manager should use laminas-loader
      *
@@ -382,33 +298,30 @@ class ListenerOptions extends AbstractOptions
      * @param  bool $flag
      * @return ListenerOptions
      */
-    public function setUseLaminasLoader($flag)
+    public function set_use_laminas_loader($flag)
     {
-        $this->useLaminasLoader = (bool) $flag;
+        $this->use_laminas_loader = (bool) $flag;
         return $this;
     }
-
     /**
      * Normalize a path for insertion in the stack
      *
      * @param  string $path
      * @return string
      */
-    public static function normalizePath($path)
+    public static function normalize_path($path)
     {
         $path = rtrim($path, '/');
         return rtrim($path, '\\');
     }
-
     /** @deprecated Use self::useLaminasLoader instead */
-    public function useZendLoader(): bool
+    public function use_zend_loader(): bool
     {
-        return $this->useLaminasLoader();
+        return $this->use_laminas_loader();
     }
-
     /** @deprecated Use self::setUseLaminasLoader instead */
-    public function setUseZendLoader(bool $flag): ListenerOptions
+    public function set_use_zend_loader(bool $flag): Listener_Options
     {
-        return $this->setUseLaminasLoader(...func_get_args());
+        return $this->set_use_laminas_loader(...func_get_args());
     }
 }

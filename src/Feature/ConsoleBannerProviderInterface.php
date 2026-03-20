@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-use Laminas\Console\Adapter\AdapterInterface;
-
-interface ConsoleBannerProviderInterface
+use Laminas\Console\Adapter\Adapter_Interface;
+interface Console_Banner_Provider_Interface
 {
     /**
      * Returns a string containing a banner text, that describes the module and/or the application.
@@ -18,5 +16,5 @@ interface ConsoleBannerProviderInterface
      *
      * @return string|null
      */
-    public function getConsoleBanner(AdapterInterface $console);
+    public function get_console_banner(Adapter_Interface $console);
 }

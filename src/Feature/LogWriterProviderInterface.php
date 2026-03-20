@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-use Laminas\ServiceManager\Config;
-
-interface LogWriterProviderInterface
+use Laminas\Service_Manager\Config;
+interface Log_Writer_Provider_Interface
 {
     /**
      * Expected to return \Laminas\ServiceManager\Config object or array to
@@ -14,5 +12,5 @@ interface LogWriterProviderInterface
      *
      * @return array|Config
      */
-    public function getLogWriterConfig();
+    public function get_log_writer_config();
 }

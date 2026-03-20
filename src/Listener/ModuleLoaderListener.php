@@ -1,67 +1,48 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\ModuleManager\Listener;
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener;
 
 use function file_exists;
-
-use Laminas\EventManager\EventManagerInterface;
-use Laminas\EventManager\ListenerAggregateInterface;
-use Laminas\Loader\ModuleAutoloader;
-use Laminas\ModuleManager\ModuleEvent;
-
+use Laminas\Event_Manager\Event_Manager_Interface;
+use Laminas\Event_Manager\Listener_Aggregate_Interface;
+use Laminas\Loader\Module_Autoloader;
+use Laminas\Module_Manager\Module_Event;
 use Override;
-
-class ModuleLoaderListener extends AbstractListener implements ListenerAggregateInterface
+class Module_Loader_Listener extends Abstract_Listener implements Listener_Aggregate_Interface
 {
     /** @var ModuleAutoloader */
-    protected $moduleLoader;
-
+    protected $module_loader;
     /** @var bool */
-    protected $generateCache;
-
+    protected $generate_cache;
     /** @var array */
     protected $callbacks = [];
-
     /**
      * Creates an instance of the ModuleAutoloader and injects the module paths
      * into it.
      */
-    public function __construct(?ListenerOptions $options = null)
+    public function __construct(?Listener_Options $options = null)
     {
         parent::__construct($options);
-
-        $this->generateCache = $this->options->getModuleMapCacheEnabled();
-        $this->moduleLoader  = new ModuleAutoloader($this->options->getModulePaths());
-
-        if ($this->hasCachedClassMap()) {
-            $this->generateCache = false;
-            $this->moduleLoader->setModuleClassMap($this->getCachedConfig());
+        $this->generate_cache = $this->options->get_module_map_cache_enabled();
+        $this->module_loader = new Module_Autoloader($this->options->get_module_paths());
+        if ($this->has_cached_class_map()) {
+            $this->generate_cache = false;
+            $this->module_loader->set_module_class_map($this->get_cached_config());
         }
     }
-
     /** {@inheritDoc} */
     #[Override]
-    public function attach(EventManagerInterface $events, $priority = 1): void
+    public function attach(Event_Manager_Interface $events, $priority = 1): void
     {
-        $this->callbacks[] = $events->attach(
-            ModuleEvent::EVENT_LOAD_MODULES,
-            [$this->moduleLoader, 'register'],
-            9000
-        );
-
-        if ($this->generateCache) {
-            $this->callbacks[] = $events->attach(
-                ModuleEvent::EVENT_LOAD_MODULES_POST,
-                $this->onLoadModulesPost(...)
-            );
+        $this->callbacks[] = $events->attach(Module_Event::EVENT_LOAD_MODULES, [$this->module_loader, 'register'], 9000);
+        if ($this->generate_cache) {
+            $this->callbacks[] = $events->attach(Module_Event::EVENT_LOAD_MODULES_POST, $this->on_load_modules_post(...));
         }
     }
-
     /** {@inheritDoc} */
     #[Override]
-    public function detach(EventManagerInterface $events): void
+    public function detach(Event_Manager_Interface $events): void
     {
         foreach ($this->callbacks as $index => $callback) {
             if ($events->detach($callback)) {
@@ -69,34 +50,24 @@ class ModuleLoaderListener extends AbstractListener implements ListenerAggregate
             }
         }
     }
-
-    protected function hasCachedClassMap(): bool
+    protected function has_cached_class_map(): bool
     {
-        if (
-            $this->options->getModuleMapCacheEnabled()
-            && file_exists($this->options->getModuleMapCacheFile())
-        ) {
+        if ($this->options->get_module_map_cache_enabled() && file_exists($this->options->get_module_map_cache_file())) {
             return true;
         }
-
         return false;
     }
-
     /** @return array */
-    protected function getCachedConfig()
+    protected function get_cached_config()
     {
-        return include $this->options->getModuleMapCacheFile();
+        return include $this->options->get_module_map_cache_file();
     }
-
     /**
      * Unregisters the ModuleLoader and generates the module class map cache.
      */
-    public function onLoadModulesPost(ModuleEvent $event): void
+    public function on_load_modules_post(Module_Event $event): void
     {
-        $this->moduleLoader->unregister();
-        $this->writeArrayToFile(
-            $this->options->getModuleMapCacheFile(),
-            $this->moduleLoader->getModuleClassMap()
-        );
+        $this->module_loader->unregister();
+        $this->write_array_to_file($this->options->get_module_map_cache_file(), $this->module_loader->get_module_class_map());
     }
 }

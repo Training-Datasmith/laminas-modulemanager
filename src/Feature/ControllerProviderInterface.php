@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-use Laminas\ServiceManager\Config;
-
-interface ControllerProviderInterface
+use Laminas\Service_Manager\Config;
+interface Controller_Provider_Interface
 {
     /**
      * Expected to return \Laminas\ServiceManager\Config object or array to seed
@@ -14,5 +12,5 @@ interface ControllerProviderInterface
      *
      * @return array|Config
      */
-    public function getControllerConfig();
+    public function get_controller_config();
 }

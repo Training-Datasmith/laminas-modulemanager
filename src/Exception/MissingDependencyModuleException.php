@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Exception;
 
-namespace Laminas\ModuleManager\Exception;
-
-class MissingDependencyModuleException extends RuntimeException implements ExceptionInterface
+class Missing_Dependency_Module_Exception extends RuntimeException implements Exception_Interface
 {
 }

@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-use Laminas\ServiceManager\Config;
-
-interface FormElementProviderInterface
+use Laminas\Service_Manager\Config;
+interface Form_Element_Provider_Interface
 {
     /**
      * Expected to return \Laminas\ServiceManager\Config object or array to
@@ -14,5 +12,5 @@ interface FormElementProviderInterface
      *
      * @return array|Config
      */
-    public function getFormElementConfig();
+    public function get_form_element_config();
 }

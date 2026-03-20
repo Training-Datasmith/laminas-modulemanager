@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-use Laminas\ServiceManager\Config;
-
-interface LogProcessorProviderInterface
+use Laminas\Service_Manager\Config;
+interface Log_Processor_Provider_Interface
 {
     /**
      * Expected to return \Laminas\ServiceManager\Config object or array to
@@ -14,5 +12,5 @@ interface LogProcessorProviderInterface
      *
      * @return array|Config
      */
-    public function getLogProcessorConfig();
+    public function get_log_processor_config();
 }

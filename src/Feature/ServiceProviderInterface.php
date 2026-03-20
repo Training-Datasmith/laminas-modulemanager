@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-use Laminas\ServiceManager\Config;
-
-interface ServiceProviderInterface
+use Laminas\Service_Manager\Config;
+interface Service_Provider_Interface
 {
     /**
      * Expected to return \Laminas\ServiceManager\Config object or array to
@@ -14,5 +12,5 @@ interface ServiceProviderInterface
      *
      * @return array|Config
      */
-    public function getServiceConfig();
+    public function get_service_config();
 }

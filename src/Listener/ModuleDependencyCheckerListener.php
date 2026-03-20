@@ -1,42 +1,29 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener;
 
-namespace Laminas\ModuleManager\Listener;
-
-use Laminas\ModuleManager\Exception;
-use Laminas\ModuleManager\Feature\DependencyIndicatorInterface;
-use Laminas\ModuleManager\ModuleEvent;
-
+use Laminas\Module_Manager\Exception;
+use Laminas\Module_Manager\Feature\Dependency_Indicator_Interface;
+use Laminas\Module_Manager\Module_Event;
 use function method_exists;
 use function sprintf;
-
-class ModuleDependencyCheckerListener
+class Module_Dependency_Checker_Listener
 {
     /** @var array of already loaded modules, indexed by module name */
     protected $loaded = [];
-
     /** @throws Exception\MissingDependencyModuleException */
-    public function __invoke(ModuleEvent $e): void
+    public function __invoke(Module_Event $e): void
     {
-        $module = $e->getModule();
-
-        if ($module instanceof DependencyIndicatorInterface || method_exists($module, 'getModuleDependencies')) {
-            $dependencies = $module->getModuleDependencies();
-
-            foreach ($dependencies as $dependencyModule) {
-                if (! isset($this->loaded[$dependencyModule])) {
-                    throw new Exception\MissingDependencyModuleException(
-                        sprintf(
-                            'Module "%s" depends on module "%s", which was not initialized before it',
-                            $e->getModuleName(),
-                            $dependencyModule
-                        )
-                    );
+        $module = $e->get_module();
+        if ($module instanceof Dependency_Indicator_Interface || method_exists($module, 'getModuleDependencies')) {
+            $dependencies = $module->get_module_dependencies();
+            foreach ($dependencies as $dependency_module) {
+                if (!isset($this->loaded[$dependency_module])) {
+                    throw new Exception\Missing_Dependency_Module_Exception(sprintf('Module "%s" depends on module "%s", which was not initialized before it', $e->get_module_name(), $dependency_module));
                 }
             }
         }
-
-        $this->loaded[$e->getModuleName()] = true;
+        $this->loaded[$e->get_module_name()] = true;
     }
 }

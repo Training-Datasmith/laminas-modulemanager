@@ -1,19 +1,17 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener;
 
-namespace Laminas\ModuleManager\Listener;
-
-interface ConfigMergerInterface
+interface Config_Merger_Interface
 {
     /**
      * @param  bool $returnConfigAsObject
      * @return mixed
      */
-    public function getMergedConfig($returnConfigAsObject = true);
-
+    public function get_merged_config($return_config_as_object = true);
     /**
      * @return ConfigMergerInterface
      */
-    public function setMergedConfig(array $config);
+    public function set_merged_config(array $config);
 }

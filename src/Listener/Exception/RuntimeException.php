@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener\Exception;
 
-namespace Laminas\ModuleManager\Listener\Exception;
-
-use Laminas\ModuleManager\Exception;
-
-class RuntimeException extends Exception\RuntimeException implements ExceptionInterface
+use Laminas\Module_Manager\Exception;
+class RuntimeException extends Exception\RuntimeException implements Exception_Interface
 {
 }

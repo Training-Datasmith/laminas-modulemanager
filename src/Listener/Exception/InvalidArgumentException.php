@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Listener\Exception;
 
-namespace Laminas\ModuleManager\Listener\Exception;
-
-use Laminas\ModuleManager\Exception;
-
-class InvalidArgumentException extends Exception\InvalidArgumentException implements ExceptionInterface
+use Laminas\Module_Manager\Exception;
+class InvalidArgumentException extends Exception\InvalidArgumentException implements Exception_Interface
 {
 }

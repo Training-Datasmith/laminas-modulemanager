@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-use Laminas\ServiceManager\Config;
-
-interface TranslatorPluginProviderInterface
+use Laminas\Service_Manager\Config;
+interface Translator_Plugin_Provider_Interface
 {
     /**
      * Expected to return \Laminas\ServiceManager\Config object or array to
@@ -14,5 +12,5 @@ interface TranslatorPluginProviderInterface
      *
      * @return array|Config
      */
-    public function getTranslatorPluginConfig();
+    public function get_translator_plugin_config();
 }

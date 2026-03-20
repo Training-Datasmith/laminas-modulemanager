@@ -1,15 +1,14 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Module_Manager\Feature;
 
-namespace Laminas\ModuleManager\Feature;
-
-interface DependencyIndicatorInterface
+interface Dependency_Indicator_Interface
 {
     /**
      * Expected to return an array of modules on which the current one depends on
      *
      * @return array
      */
-    public function getModuleDependencies();
+    public function get_module_dependencies();
 }
